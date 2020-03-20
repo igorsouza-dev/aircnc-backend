@@ -1,13 +1,10 @@
 import { Router } from 'express';
-import UserController from './app/controllers/SessionController';
+import SessionController from './app/controllers/SessionController';
+import UserController from './app/controllers/UserController';
 
 const routes = Router();
 
-routes.get('/', (req, res) => res.send('hello world'));
-
-routes.get('/users', UserController.index);
-routes.post('/users', UserController.store);
-routes.put('/users/:id', UserController.update);
-routes.delete('/users/:id', UserController.destroy);
+routes.post('/signup', UserController.store);
+routes.post('/signin', SessionController.store);
 
 export default routes;

@@ -1,25 +1,24 @@
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import authConfig from '../../config/auth';
 
 export default {
-  async index(req: Request, res: Response) {
-    return res.json({ method: 'index' });
-  },
-
-  async show(req: Request, res: Response) {
-    return res.json({ method: 'show' });
-  },
-
   async store(req: Request, res: Response) {
-    const user = await User.create(req.body);
-    return res.json(user);
-  },
-
-  async update(req: Request, res: Response) {
-    return res.json({ method: 'update', id: req.params.id });
-  },
-
-  async destroy(req: Request, res: Response) {
-    return res.json({ method: 'delete', id: req.params.id });
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(401).json({ error: 'User not found!' });
+    }
+    if (!(await user.checkPassword(password))) {
+      return res.status(401).json({ error: 'Password does not match!' });
+    }
+    const { id, name } = user;
+    return res.json({
+      user: { id, name, email },
+      token: jwt.sign({ id }, authConfig.secret, {
+        expiresIn: authConfig.expiresIn,
+      }),
+    });
   },
 };
