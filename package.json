@@ -19,6 +19,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpileOnly src/server.ts"
+    "dev": "ts-node-dev --respawn --transpileOnly src/server.ts",
+    "prod": "tsc && node dist/server.js"
   }
 }
