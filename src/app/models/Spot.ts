@@ -32,6 +32,12 @@ class Spot extends Model {
           type: new DataTypes.STRING(128),
           allowNull: false,
         },
+        thumbnail_url: {
+          type: DataTypes.VIRTUAL,
+          get(): string {
+            return `${process.env.HOST}:${process.env.PORT}/files/${this.thumbnail}`;
+          },
+        },
         company: {
           type: new DataTypes.STRING(128),
           allowNull: false,
